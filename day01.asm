@@ -8,7 +8,7 @@ NEWLINE: equ    10
 global start
 
 start:
-    mov rax, 413
+    call read_num
     call print_num
     call newline
 
@@ -17,6 +17,42 @@ exit:
     mov rdi, 0
     syscall
 
+
+;; returns the read number on stdout
+;; reads until a newline
+read_num:
+    push r8
+    mov rbx, 0
+    mov r8, 10
+    sub rsp, 1
+
+read_num_loop:
+    mov BYTE [rsp], NEWLINE ;; store a newline so at EOF we see a newline
+    ;; read(stdin, sp, 1)
+    mov rax, SYS_READ
+    mov rdi, STDIN
+    mov rsi, rsp
+    mov rdx, 1
+    syscall
+
+    cmp BYTE [rsp], NEWLINE
+    je  read_num_done
+
+    mov rax, rbx
+    mul r8  ;; rax *= 10
+    movzx rbx, BYTE [rsp]
+    sub rbx, '0'
+    add rbx, rax
+    jmp read_num_loop
+
+read_num_done:
+    add rsp, 1
+    pop r8
+    mov rax, rbx
+    ret
+
+
+;; rax contains the number to print
 print_num:
     mov rbp, rsp
     mov rsi, 0 ;; no characters written yet
