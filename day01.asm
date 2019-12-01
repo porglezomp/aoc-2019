@@ -8,17 +8,27 @@ NEWLINE: equ    10
 global start
 
 start:
+    call tests
     mov r8, 0
+    mov r9, 0
 main_loop:
     call read_num
     cmp rax, 0
     je main_loop_done
+    mov r10, rax
     call rocket_equation
     add r8, rax
+    mov rax, r10
+    call rocket_equation2
+    add r9, rax
     jmp main_loop
 
 main_loop_done:
     mov rax, r8
+    call print_num
+    call newline
+
+    mov rax, r9
     call print_num
     call newline
 
@@ -28,11 +38,52 @@ exit:
     syscall
 
 
+tests:
+    mov rax, 14
+    call rocket_equation2
+    mov rdi, 1
+    cmp rax, 2
+    jne fail
+
+    mov rax, 1969
+    call rocket_equation2
+    mov rdi, 2
+    cmp rax, 966
+    jne fail
+
+    mov rax, 100756
+    call rocket_equation2
+    mov rdi, 3
+    cmp rax, 50346
+    jne fail
+
+    ret
+
+fail:
+    mov rax, SYS_EXIT
+    syscall
+
+
 rocket_equation:
     mov rdx, 0
     mov rbx, 3
-    div rbx
+    idiv rbx
     sub rax, 2
+    ret
+
+
+rocket_equation2:
+    push r8
+    mov r8, 0
+rocket_equation2_loop:
+    call rocket_equation
+    cmp rax, 0
+    jle rocket_equation2_loop_end
+    add r8, rax
+    jmp rocket_equation2_loop
+rocket_equation2_loop_end
+    mov rax, r8
+    pop r8
     ret
 
 
