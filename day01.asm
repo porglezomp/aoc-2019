@@ -8,7 +8,17 @@ NEWLINE: equ    10
 global start
 
 start:
+    mov r8, 0
+main_loop:
     call read_num
+    cmp rax, 0
+    je main_loop_done
+    call rocket_equation
+    add r8, rax
+    jmp main_loop
+
+main_loop_done:
+    mov rax, r8
     call print_num
     call newline
 
@@ -16,6 +26,14 @@ exit:
     mov rax, SYS_EXIT
     mov rdi, 0
     syscall
+
+
+rocket_equation:
+    mov rdx, 0
+    mov rbx, 3
+    div rbx
+    sub rax, 2
+    ret
 
 
 ;; returns the read number on stdout
