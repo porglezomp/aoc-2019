@@ -6,13 +6,17 @@ Following [an idea from @chordbug on twitter][tweet], I'll be doing Advent of Co
 [tweet]: https://twitter.com/chordbug/status/1068321394897899520
 [last year]: https://github.com/porglezomp/aoc-2018
 
+- Day 1: x86 assembly. (x86-64, [macOS system calls])
+
+[macos system calls]: https://stackoverflow.com/questions/48845697/macos-64-bit-system-call-table
+
 ## Languages to Use?
 
 I need 25 languages, here are some ones that I could use:
 
 - [ ] Agda
 - [ ] ATS
-- [ ] Assembly
+- [x] Assembly
 - [ ] Awk
 - [ ] BASIC
 - [ ] C
